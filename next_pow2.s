@@ -1,12 +1,30 @@
 .data
-    list: .word 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-    ans: .word 1, 2, 4, 4, 8, 8, 8, 8, 16, 16
+    list: .word 0, 2, 9
 
 .text
 main:
-    li a0, 1
+    la t0, list
+    add t1, x0, x0
+    addi t2, x0, 12
+test:
+    beq t1, t2, exit
+    add t3, t0, t1
+    lw a0, 0(t3)
+
+    addi sp, sp, -12
+    sw t0, 0(sp)
+    sw t1, 4(sp)
+    sw t2, 8(sp)
+
     jal ra, next_pow2
-    jal print
+    jal ra, print
+
+    lw t2, 8(sp)
+    lw t1, 4(sp)
+    lw t0, 0(sp)
+    addi sp, sp, 12
+    addi t1, t1, 4
+    j test
 
 next_pow2:
     bne a0, zero, pass
@@ -17,9 +35,9 @@ pass:
     addi sp, sp, -4
     sw ra, 0(sp)
     
-    # t0 = 64 - clz(a0)
+    # t0 = 32 - clz(a0)
     jal ra, clz
-    li t0, 64
+    li t0, 32
     sub t0, t0, a0
     li a0, 1
     sll a0, a0, t0
@@ -50,24 +68,24 @@ End:
     and t0, t0, t1
     sub s2, s2, t0
 
-    slli t0, s2, 2
+    srli t0, s2, 2
     li t1, 858993459
     and t0, t0, t1
     and t1, s2, t1
     add s2, t0, t1
 
-    slli t0, s2, 4
+    srli t0, s2, 4
     add t0, t0, s2
     li t1, 252645135
     and s2, t0, t1
 
-    slli t0, s2, 8
+    srli t0, s2, 8
     add s2, t0, s2
 
-    slli t0, s2, 16
+    srli t0, s2, 16
     add s2, t0, s2
 
-    li a0, 64
+    li a0, 32
     andi t0 ,s2, 0x7f
     sub a0, a0, t0
 
@@ -81,5 +99,8 @@ End:
 print:
     li a7, 1
     ecall
+    jr ra
 
 exit:
+    li a7, 10
+    ecall
