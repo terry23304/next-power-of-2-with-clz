@@ -53,16 +53,23 @@ clz:
     sw s1, 8(sp)
     sw s2, 12(sp)
 
-    li s0, 32 # loop counter
-    li s1, 1
     add s2, zero, a0 # x
-Loop:
-    beq s0, s1, End
-    srl t0, s2, s1  # x >> s1
-    or s2, s2, t0   # x |= (x >> s1)
-    slli s1, s1, 1   # s1 *= 2
-    j Loop
-End:
+
+    srli t0, s2, 1  # x >> 1
+    or s2, s2, t0   # x |= (x >> 1)
+
+    srli t0, s2, 2  # x >> 2
+    or s2, s2, t0   # x |= (x >> 2)
+
+    srli t0, s2, 4  # x >> 4
+    or s2, s2, t0   # x |= (x >> 4)
+
+    srli t0, s2, 8  # x >> 8
+    or s2, s2, t0   # x |= (x >> 8)
+
+    srli t0, s2, 16  # x >> 16
+    or s2, s2, t0   # x |= (x >> 1)
+
     srli t0, s2, 1
     li t1, 1431655765
     and t0, t0, t1
