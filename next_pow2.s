@@ -3,27 +3,18 @@
 
 .text
 main:
-    la t0, list
-    add t1, x0, x0
-    addi t2, x0, 12
+    la s0, list
+    add s1, x0, x0
+    addi s2, x0, 12
 test:
-    beq t1, t2, exit
-    add t3, t0, t1
-    lw a0, 0(t3)
-
-    addi sp, sp, -12
-    sw t0, 0(sp)
-    sw t1, 4(sp)
-    sw t2, 8(sp)
+    beq s1, s2, exit
+    add s3, s0, s1
+    lw a0, 0(s3)
 
     jal ra, next_pow2
     jal ra, print
 
-    lw t2, 8(sp)
-    lw t1, 4(sp)
-    lw t0, 0(sp)
-    addi sp, sp, 12
-    addi t1, t1, 4
+    addi s1, s1, 4
     j test
 
 next_pow2:
