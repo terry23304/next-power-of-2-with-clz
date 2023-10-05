@@ -4,18 +4,20 @@
 .text
 main:
     la s0, list
-    add s1, x0, x0
-    addi s2, x0, 12
-test:
-    beq s1, s2, exit
-    add s3, s0, s1
-    lw a0, 0(s3)
 
+    lw a0, 0(s0)
     jal ra, next_pow2
     jal ra, print
 
-    addi s1, s1, 4
-    j test
+    lw a0, 4(s0)
+    jal ra, next_pow2
+    jal ra, print
+
+    lw a0, 8(s0)
+    jal ra, next_pow2
+    jal ra, print
+
+    j exit
 
 next_pow2:
     bne a0, zero, pass
